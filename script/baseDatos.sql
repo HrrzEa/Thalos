@@ -1,0 +1,29 @@
+-- Crear base de datos (si no existe)
+CREATE DATABASE IF NOT EXISTS ia_talleres DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE ia_talleres;
+
+CREATE TABLE usuario (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  correo VARCHAR(255) NOT NULL UNIQUE,
+  contrasena VARCHAR(255) NOT NULL,
+  nombre VARCHAR(100) NOT NULL,
+  nombre_taller VARCHAR(150) NOT NULL,
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE chat (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  usuario_id INT NOT NULL,
+  titulo VARCHAR(255) DEFAULT 'Nuevo Chat',
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+);
+
+CREATE TABLE mensaje (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  chat_id INT NOT NULL,
+  emisor ENUM('usuario', 'ia') NOT NULL,
+  contenido TEXT NOT NULL,
+  fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (chat_id) REFERENCES chat(id) ON DELETE CASCADE
+);
